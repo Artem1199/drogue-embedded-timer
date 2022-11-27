@@ -12,14 +12,14 @@ use crate::delay::Delay;
 
 struct Storage<Clock>
     where
-        Clock: embedded_time::Clock,
+        Clock: embedded_time::clock::Clock,
 {
     instant: Mutex<Cell<Option<Instant<Clock>>>>,
 }
 
 impl<Clock> Storage<Clock>
     where
-        Clock: embedded_time::Clock,
+        Clock: embedded_time::clock::Clock,
 {
     fn tick<Dur>(&self, duration: Dur)
         where
@@ -100,13 +100,13 @@ macro_rules! ticker {
 
         /// An external clock ticker.
         /// Use from within an interrupt handler, typically.
-        pub struct $name<'a, Clock: embedded_time::Clock, Timer, IrqClearer: Fn(&mut Timer)> {
+        pub struct $name<'a, Clock: embedded_time::clock::Clock, Timer, IrqClearer: Fn(&mut Timer)> {
             timer: Timer,
             irq_clearer: IrqClearer,
             instant: &'a Storage<Clock>,
         }
 
-        impl<'a, Clock: embedded_time::Clock, Timer, IrqClearer: Fn(&mut Timer)>
+        impl<'a, Clock: embedded_time::clock::Clock, Timer, IrqClearer: Fn(&mut Timer)>
             $name<'a, Clock, Timer, IrqClearer>
         {
             fn new(timer: Timer, irq_clearer: IrqClearer, storage: &'a Storage<Clock>) -> Self {

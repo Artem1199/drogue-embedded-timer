@@ -7,13 +7,13 @@ use core::convert::TryFrom;
 /// A blocking delay
 ///#[derive(Copy, Clone)]
 pub struct Delay<'a, Clock>
-    where Clock: embedded_time::Clock
+    where Clock: embedded_time::clock::Clock
 {
     clock: &'a Clock
 }
 
 impl<Clock> Clone for Delay<'_, Clock>
-    where Clock: embedded_time::Clock {
+    where Clock: embedded_time::clock::Clock {
     fn clone(&self) -> Self {
         Self {
             clock: self.clock,
@@ -22,13 +22,13 @@ impl<Clock> Clone for Delay<'_, Clock>
 }
 
 impl<Clock> Copy for Delay<'_, Clock>
-    where Clock: embedded_time::Clock { }
+    where Clock: embedded_time::clock::Clock { }
 
 
 
 impl<'a, Clock> Delay<'a, Clock>
     where
-        Clock: embedded_time::Clock,
+        Clock: embedded_time::clock::Clock,
 
 {
 
@@ -57,7 +57,7 @@ macro_rules! delay_impl {
     ($impl:ident, $func:ident, $vt:ident, $wt:ident) => {
             impl<'a, Clock> $impl<$vt> for Delay<'a, Clock>
             where
-                Clock: embedded_time::Clock,
+                Clock: embedded_time::clock::Clock,
         {
             fn $func(&mut self, value: $vt) {
                 self.delay($wt(value as u32))
